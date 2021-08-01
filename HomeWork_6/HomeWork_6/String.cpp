@@ -219,3 +219,136 @@ void String::trimm() {
 	}
 }
 
+BitString &BitString::operator<<(signed int num) {
+	if (num < 0) {
+		throw std::exception(" оличество сдвигов должно быть положительным числом!");
+	}
+	else {
+		BitString tempString(getSize());
+		tempString.setSize(getSize());
+		for (int i = 0; i < getSize(); i++) {
+			tempString.getArray()[i] = getArray()[i];
+		}
+		if (num >= getSize() - 1) {
+			for (int j = 0; j < getSize() - 1; j++) {
+				getArray()[j] = '0';
+			}
+		}
+		else {
+			int k{ 0 };
+			for (int h = num; h < tempString.getSize() - 1; h++) {
+				getArray()[k] = tempString.getArray()[h];
+				k++;
+			}
+			for (int n = k; n < getSize() - 1; n++) {
+				getArray()[k] = '0';
+				k++;
+			}
+		}
+		return *this;
+	}
+}
+
+BitString &BitString::operator>>(signed int num) {
+	if (num < 0) {
+		throw std::exception(" оличество сдвигов должно быть положительным числом!");
+	}
+	else {
+		BitString tempString(getSize());
+		tempString.setSize(getSize());
+		for (int i = 0; i < getSize(); i++) {
+			tempString.getArray()[i] = getArray()[i];
+		}
+		if (num >= getSize() - 1) {
+			for (int j = 0; j < getSize() - 1; j++) {
+				getArray()[j] = '0';
+			}
+		}
+		else {
+			int k{ 0 };
+			for (int h = 0; h < num; h++) {
+				getArray()[k] = '0';
+				k++;
+			}
+			for (int n = 0; n < getSize() - 1 - num; n++) {
+				getArray()[k] = tempString.getArray()[n];
+				k++;
+			}
+		}
+		return *this;
+	}
+}
+
+BitString BitString::operator ~ () {
+	for (int i = 0; i < getSize() - 1; i++) {
+		if (isBitString(getArray())) {
+			if (getArray()[i] == '0') {
+				getArray()[i] = '1';
+			}
+			else {
+				getArray()[i] = '0';
+			}
+		}
+		else {
+			throw std::exception("Ѕитова€ строка должна содержать '0' или '1'!");
+		}
+	}
+	return *this;
+}
+
+BitString operator | (BitString &one, BitString &two) {
+	if (one.getSize() != two.getSize()) {
+		throw std::exception("—троки должны быть одного размера!");
+	}
+	else {
+		BitString result(one.getSize());
+		result.setSize(one.getSize());
+		for (int i = 0; i < result.getSize() - 1; i++) {
+			if (one.getArray()[i] == '1' || two.getArray()[i] == '1') {
+				result.getArray()[i] = '1';
+			}
+			else {
+				result.getArray()[i] = '0';
+			}
+		}
+		return result;
+	}
+}
+
+BitString operator & (BitString &one, BitString &two) {
+	if (one.getSize() != two.getSize()) {
+		throw std::exception("—троки должны быть одного размера!");
+	}
+	else {
+		BitString result(one.getSize());
+		result.setSize(one.getSize());
+		for (int i = 0; i < result.getSize() - 1; i++) {
+			if (one.getArray()[i] == '1' && two.getArray()[i] == '1') {
+				result.getArray()[i] = '1';
+			}
+			else {
+				result.getArray()[i] = '0';
+			}
+		}
+		return result;
+	}
+}
+
+BitString operator ^ (BitString &one, BitString &two) {
+	if (one.getSize() != two.getSize()) {
+		throw std::exception("—троки должны быть одного размера!");
+	}
+	else {
+		BitString result(one.getSize());
+		result.setSize(one.getSize());
+		for (int i = 0; i < result.getSize() - 1; i++) {
+			if (one.getArray()[i] != two.getArray()[i]) {
+				result.getArray()[i] = '1';
+			}
+			else {
+				result.getArray()[i] = '0';
+			}
+		}
+		return result;
+	}
+}
