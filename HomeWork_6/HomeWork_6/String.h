@@ -83,6 +83,22 @@ private:
 	char *array;
 };
 
+class BitString : public String {
+public:
+	BitString(int size) : String(size) {}
+	BitString() : String() {}
+	BitString(const char *NewStr);
+	BitString(const String &object);
 
+	void setNewArray() override;
+
+	//Перевод в десятичное число. Изменяет старое поведение. Но решила оставить так из-за текущего задания.
+	operator int() override;
+
+private:
+	bool isBitString(const char *str);
+
+	bool isBitSymbol(char sym);
+};
 
 #endif STRING

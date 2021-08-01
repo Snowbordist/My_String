@@ -219,3 +219,81 @@ void String::trimm() {
 	}
 }
 
+BitString::BitString(const char *NewStr) : String() {
+	if (isBitString(NewStr)) {
+		setSize(strlen(NewStr) + 1);
+		for (int i = 0; i < getSize() - 1; i++) {
+			getArray()[i] = NewStr[i];
+		}
+	}
+	else {
+		throw std::exception("Битовая строка должна содержать '0' или '1'!");
+	}
+}
+
+BitString::BitString(const String &object) : String(object) {
+	if (!isBitString(getArray())) {
+		for (int i = 0; i < getSize() - 1; i++) {
+			getArray()[i] = 0;
+		}
+		throw std::exception("Битовая строка должна содержать '0' или '1'!");
+	}
+}
+
+void BitString::setNewArray() {
+	std::cout << "Введите строку и нажмите Enter.\n";
+	if (getSize() < 80) {
+		setSize(80);
+		allocatorString.deallocate(getArray());
+		setArray(allocatorString.allocate(getSize()));;
+	}
+	for (int i = 0; i < getSize() - 1; i++) {
+		getArray()[i] = _getch();
+		std::cout << getArray()[i];
+		if (!isBitSymbol(getArray()[i])) {
+			throw std::exception("Битовая строка должна содержать '0' или '1'!");
+		}
+		if (getArray()[i] == 13) {
+			break;
+		}
+	}
+	std::cout << std::endl;
+}
+
+BitString::operator int() {
+	const int notationSystem{ 2 };
+	int rankNumber{ 0 };
+	while (getArray()[rankNumber] != '\0') {
+		rankNumber++;
+	}
+	int result{ 0 };
+	int j = rankNumber - 1;
+	for (int i = 0; i < rankNumber; i++) {
+		if (getArray()[i] == '0') {
+			j--;
+			continue;
+		}
+		else {
+			result += pow(notationSystem, j);
+			j--;
+		}
+	}
+	return result;
+}
+
+bool BitString::isBitString(const char *str) {
+	int tempSize = strlen(str);
+	for (int i = 0; i < tempSize; i++) {
+		if (str[i] != '0' && str[i] != '1') return false;
+	}
+	return true;
+}
+
+bool BitString::isBitSymbol(char sym) {
+	if (sym == 0 || sym == 1) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
